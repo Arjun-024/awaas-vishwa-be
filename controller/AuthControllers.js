@@ -32,6 +32,17 @@ const registerUser = async (req, res) => {
 
   //save into database
   try {
+    const userByUserName = await User.findOne({username: username})
+    if (userByUserName) {
+      res.status(400).json({error: 'Username alredy exists'})
+      return
+    }
+    const userByEmail = await User.findOne({email: email})
+    if (userByEmail) {
+      res.status(400).json({error: 'Email already exists'})
+      return
+    }
+
     const userDoc = await User.create({
       name,
       phone,
